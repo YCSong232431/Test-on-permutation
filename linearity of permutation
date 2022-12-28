@@ -1,5 +1,6 @@
 # Proposition 2
 # Test on the linearity of permutation
+# https://github.com/YCSong232431/Test-on-permutation/tree/main
 
 (q,m,n,k,t) = (2,31,26,13,8)
 Fqm = GF(q^m)
