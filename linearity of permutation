@@ -1,0 +1,31 @@
+# Proposition 2
+# Test on the linearity of permutation
+
+(q,m,n,k,t) = (2,31,26,13,8)
+Fqm = GF(q^m)
+
+def random_small_vec_gen(Fqm,n,t):
+    B = matrix(Fqm.base_ring(),t,m,0)
+    while B.rank() != t:
+        B = matrix(Fqm.base_ring(),[vector(Fqm.random_element()) for i in range(t)])
+    C = matrix(Fqm.base_ring(),n,m,0)
+    while C.rank() != t:
+        C = matrix(Fqm.base_ring(),n,t,[Fqm.base_ring().random_element() for _ in range(n*t)]) * B
+    return vector(Fqm,[C[i] for i in range(n)])
+
+def vector_matrix(small_vector):
+    length = len(list(small_vector)) 
+    return matrix(Fqm.base_ring(),length,m,[vector(small_vector[j]) for j in range(length)])
+
+def IIPQ(z,P,Q):
+    V = P * vector_matrix(z).transpose() * Q
+    return vector([Fqm(v) for v in V.columns()]) 
+
+x = random_small_vec_gen(Fqm,n,t)
+alpha1 = Fqm.random_element()
+alpha2 = GF(q).random_element()
+P = GL(m,GF(q)).random_element()
+Q = GL(n,GF(q)).random_element()
+
+print(alpha1 * IIPQ(x,P,Q) == IIPQ(alpha1 * x,P,Q))
+print(alpha2 * IIPQ(x,P,Q) == IIPQ(alpha2 * x,P,Q))
